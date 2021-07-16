@@ -10,4 +10,3 @@ void D3DManager::DebugBox(int i) {
 void D3DManager::DebugBox(const char* str){
     MessageBoxA(nullptr, str, "const char*", MB_OK);
 }
-

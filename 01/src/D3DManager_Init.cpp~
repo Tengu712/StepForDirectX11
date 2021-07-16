@@ -48,4 +48,3 @@ bool D3DManager::init(HINSTANCE hInst, int cmdShow, LPCWSTR nameWnd, LPCWSTR nam
 
     return true;
 }
-
