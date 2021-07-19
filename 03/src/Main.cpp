@@ -20,6 +20,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPInst, LPSTR pCmd, int cmdShow) {
             TranslateMessage(&msg);
             DispatchMessageW(&msg);
         } else {
+            dmanager.drawBegin();
+            dmanager.drawEnd();
         }
     }
 
