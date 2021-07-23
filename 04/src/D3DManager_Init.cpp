@@ -1,4 +1,6 @@
 #include "../include/HeaderDX11.hpp"
+#include "../include/pshader.h"
+#include "../include/vshader.h"
 
 LRESULT WINAPI WndProc(HWND hWnd, unsigned int msg, WPARAM wParam, LPARAM lParam) {
     switch (msg) {
@@ -103,6 +105,24 @@ bool D3DManager::init(HINSTANCE hInst, int cmdShow, LPCWSTR nameWnd, LPCWSTR nam
 
         // Create Viewport
         inf.viewport = {0.0f, 0.0f, (float)width, (float)height, 0.0f, 1.0f};
+
+        // Create Shader
+        if (FAILED(inf.pDevice->CreateVertexShader(g_vs_main, sizeof(g_vs_main), nullptr, inf.pVShader.GetAddressOf())))
+            throw "Error: Failed to create vertex shader.";
+        if (FAILED(inf.pDevice->CreatePixelShader(g_ps_main, sizeof(g_ps_main), nullptr, inf.pPShader.GetAddressOf())))
+            throw "Error: Failed to create pixel shader.";
+
+        // Create input element desc
+        {
+            D3D11_INPUT_ELEMENT_DESC descElem[] = {
+                {"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+                {"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT,
+                    D3D11_INPUT_PER_VERTEX_DATA, 0},
+            };
+            if (FAILED(inf.pDevice->CreateInputLayout(
+                    descElem, ARRAYSIZE(descElem), g_vs_main, sizeof(g_vs_main), inf.pILayout.GetAddressOf())))
+                return false;
+        }
 
     } catch (const char* error) {
         DebugBox(error);

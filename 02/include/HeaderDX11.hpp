@@ -18,9 +18,10 @@ private:
     HWND hWnd;
 public:
     D3DManager();
+    void quit(HINSTANCE hInst);
     // General
-    bool init(HINSTANCE hInst, int cmdShow, LPCWSTR wndName, LPCWSTR wndClassName, unsigned int width,
-        unsigned int height, bool windowed);
+    bool init(HINSTANCE hInst, int cmdShow, LPCWSTR wndName, unsigned int width, unsigned int height, bool windowed);
+    HWND* getWindowHandle();
     // Debug
     void DebugBox(int i);
     void DebugBox(const char* str);
