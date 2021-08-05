@@ -22,6 +22,21 @@ void D3DManager::drawModel(ModelInf* minf) {
     inf.pImContext->IASetVertexBuffers(0U, 1U, minf->pVBuffer.GetAddressOf(), &strides, &offsets);
     inf.pImContext->IASetIndexBuffer(minf->pIBuffer.Get(), DXGI_FORMAT_R32_UINT, 0U);
 
+    DirectX::XMStoreFloat4x4(&inf.cbuffer.matScl, DirectX::XMMatrixTranspose(
+        DirectX::XMMatrixScaling(minf->sclX, minf->sclY, minf->sclZ)));
+    DirectX::XMStoreFloat4x4(&inf.cbuffer.matRot, DirectX::XMMatrixTranspose(
+        DirectX::XMMatrixRotationRollPitchYaw(
+            DirectX::XMConvertToRadians(minf->degX),
+            DirectX::XMConvertToRadians(minf->degY),
+            DirectX::XMConvertToRadians(minf->degZ))));
+    DirectX::XMStoreFloat4x4(&inf.cbuffer.matTrs, DirectX::XMMatrixTranspose(
+            DirectX::XMMatrixTranslation(minf->posX, minf->posY, minf->posZ)));
+    DirectX::XMStoreFloat4(&inf.cbuffer.vecColor,
+        DirectX::XMVectorSet(minf->colR, minf->colG, minf->colB, minf->colA));
+
+    inf.pImContext->UpdateSubresource(inf.pCBuffer.Get(), 0U, nullptr, &inf.cbuffer, 0U, 0U);
+    inf.pImContext->VSSetConstantBuffers(0U, 1U, inf.pCBuffer.GetAddressOf());
+
     inf.pImContext->DrawIndexed(minf->numIdx, 0U, 0U);
 }
 
