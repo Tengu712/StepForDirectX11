@@ -1,0 +1,5 @@
+/build/*.exe
+/include/*.un~
+/include/*.hpp~
+/src/*.un~
+/src/*.cpp~
