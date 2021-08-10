@@ -1,4 +1,5 @@
 ﻿#include "../include/HeaderApp.hpp"
+#include "../include/resource.hpp"
 
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPInst, LPSTR pCmd, int cmdShow) {
 
@@ -18,7 +19,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPInst, LPSTR pCmd, int cmdShow) {
     dmanager.applyCamera(&camera);
 
     Texture tex = Texture();
-    if(!dmanager.createTexture(0, &tex))
+    if(!dmanager.createTexture(TEX_HOGE, &tex))
         return 1;
     dmanager.applyTexture(&tex);
 

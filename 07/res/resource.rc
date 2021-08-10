@@ -1,3 +1,4 @@
 #include "../include/resource.hpp"
 
-TEX_TEST RCDATA DISCARDABLE "./testtex.bmp"
+TEX_TEST IMAGE "./testtex.png"
+TEX_HOGE IMAGE "./hogetex.png"

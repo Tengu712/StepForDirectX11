@@ -1,4 +1,5 @@
 #include "../include/HeaderDX11.hpp"
+#include "../include/resource.hpp"
 
 #include <wincodec.h>
 #pragma comment(lib, "Windowscodecs.lib")
@@ -6,17 +7,37 @@
 
 bool D3DManager::createTexture(unsigned int id, Texture* pTexture) {
     try {
-        if (FAILED(CoInitialize(nullptr)))
-            throw "Failed to start loading texture.";
+        HRSRC hImageRes = FindResource(nullptr, MAKEINTRESOURCE(id), "IMAGE");
+        if (!hImageRes)
+            throw "Failed to find resource.";
+
+        HGLOBAL hImageData = LoadResource(nullptr, hImageRes);
+        if (!hImageData)
+            throw "Failed to load resource.";
+
+        void* pLock = LockResource(hImageData);
+        if (!pLock)
+            throw "Failed to lock resource.";
+
+        DWORD sizeRes = SizeofResource(nullptr, hImageRes);
+        if (sizeRes == 0)
+            throw "Failed to get size of resource.";
 
         ComPtr<IWICImagingFactory> pFactory = nullptr;
         if (FAILED(CoCreateInstance(CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER, IID_IWICImagingFactory,
                 (LPVOID*)pFactory.GetAddressOf())))
             throw "Failed to create wic factory.";
 
+        ComPtr<IWICStream> pStream = nullptr;
+        if (FAILED(pFactory->CreateStream(pStream.GetAddressOf())))
+            throw "Failed to create stream.";
+
+        if (FAILED(pStream->InitializeFromMemory((byte*)pLock, sizeRes)))
+            throw "Failed to initialize stream.";
+
         ComPtr<IWICBitmapDecoder> pDecoder = nullptr;
-        if (FAILED(pFactory->CreateDecoderFromFilename(
-                L"../res/testtex.png", nullptr, GENERIC_READ, WICDecodeMetadataCacheOnDemand, pDecoder.GetAddressOf())))
+        if (FAILED(pFactory->CreateDecoderFromStream(
+                pStream.Get(), nullptr, WICDecodeMetadataCacheOnLoad, pDecoder.GetAddressOf())))
             throw "Failed to load file.";
 
         ComPtr<IWICBitmapFrameDecode> pFrame = nullptr;
@@ -61,7 +82,6 @@ bool D3DManager::createTexture(unsigned int id, Texture* pTexture) {
         return false;
     }
 
-    CoUninitialize();
     return true;
 }
 
