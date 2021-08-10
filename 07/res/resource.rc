@@ -1,4 +1,3 @@
 #include "../include/resource.hpp"
 
 TEX_TEST IMAGE "./testtex.png"
-TEX_HOGE IMAGE "./hogetex.png"

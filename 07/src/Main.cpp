@@ -15,11 +15,11 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPInst, LPSTR pCmd, int cmdShow) {
 
     Camera camera = Camera();
     dmanager.createCamera((float)kWidth, (float)kHeight, &camera);
-    camera.posZ = -500.0f;
+    camera.posZ = -300.0f;
     dmanager.applyCamera(&camera);
 
     Texture tex = Texture();
-    if(!dmanager.createTexture(TEX_HOGE, &tex))
+    if(!dmanager.createTexture(TEX_TEST, &tex))
         return 1;
     dmanager.applyTexture(&tex);
 
