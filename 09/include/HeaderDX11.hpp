@@ -8,14 +8,12 @@
 #include <wrl/client.h>
 #include <xinput.h>
 #include <xaudio2.h>
-#include <mmsystem.h>
 
 #pragma comment(lib, "user32.lib")
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxgi.lib")
 #pragma comment (lib, "xinput.lib")
 #pragma comment (lib, "xaudio2.lib")
-#pragma comment(lib, "winmm.lib")
 
 using Microsoft::WRL::ComPtr;
 
@@ -157,14 +155,8 @@ struct AudioParam {
 };
 
 class Audio {
-private:
-    bool isPlaying;
-    HANDLE hThread;
 public:
-    int nABPS;
-    HMMIO hMmio;
     IXAudio2SourceVoice* pSVoice;
-    VoiceCallback callback;
     Audio();
     ~Audio();
     void play();

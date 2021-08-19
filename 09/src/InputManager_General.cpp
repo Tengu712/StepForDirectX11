@@ -20,7 +20,7 @@ bool InputManager::addKeycode(char codeKey, char codeKeyboard, GAMEPAD_KEYTYPE t
 
 void InputManager::inspect() {
     XINPUT_STATE stateXInp;
-    XInputGetState(0, &stateXInp);
+    DWORD dwRes = XInputGetState(0, &stateXInp);
     for (int i = 0; i < numRegistered; ++i) {
         bool flagKB = GetAsyncKeyState(inf[i].codeKeyboard) & 0x8000;
         bool flagXI = false;
@@ -46,6 +46,8 @@ void InputManager::inspect() {
             flagXI = stateXInp.Gamepad.sThumbRY < -inf[i].codeGamepad;
         else if (inf[i].typeGamepadKey == GAMEPAD_KEYTYPE::ThumbRD)
             flagXI = stateXInp.Gamepad.sThumbRY > inf[i].codeGamepad;
+        if (dwRes != ERROR_SUCCESS)
+            flagXI = false;
         if (flagKB || flagXI)
             inf[i].state = ((statePrev[i] << 1) ^ 0b011) & 0b011;
         else
