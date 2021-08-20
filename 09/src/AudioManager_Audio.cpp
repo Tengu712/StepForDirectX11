@@ -14,3 +14,10 @@ void Audio::play() {
 void Audio::stop() {
     pSVoice->Stop();
 }
+
+void Audio::restart() {
+    pSVoice->Stop();
+    pSVoice->FlushSourceBuffers();
+    pSVoice->SubmitSourceBuffer(&buffer);
+    pSVoice->Start(0);
+}

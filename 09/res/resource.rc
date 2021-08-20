@@ -3,3 +3,4 @@
 TEX_TEST IMAGE "./testtex.png"
 
 MUS_TEST WAVE "./test.wav"
+MUS_TEST2 WAVE "./test2.wav"

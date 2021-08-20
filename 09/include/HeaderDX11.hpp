@@ -157,10 +157,12 @@ struct AudioParam {
 class Audio {
 public:
     IXAudio2SourceVoice* pSVoice;
+    XAUDIO2_BUFFER buffer;
     Audio();
     ~Audio();
     void play();
     void stop();
+    void restart();
 };
 
 class AudioManager {

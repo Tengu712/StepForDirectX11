@@ -100,16 +100,15 @@ bool AudioManager::createAudio(unsigned int id, Audio* pAudio) {
         BYTE* pDataBuffer = new BYTE[sizeChunk];
         memcpy(pDataBuffer, pLock + posChunk, sizeChunk);
 
-        XAUDIO2_BUFFER bufXAudio;
-        ZeroMemory(&bufXAudio, sizeof(XAUDIO2_BUFFER));
-        bufXAudio.Flags = XAUDIO2_END_OF_STREAM;
-        bufXAudio.AudioBytes = sizeChunk;
-        bufXAudio.pAudioData = pDataBuffer;
+        ZeroMemory(&pAudio->buffer, sizeof(XAUDIO2_BUFFER));
+        pAudio->buffer.Flags = XAUDIO2_END_OF_STREAM;
+        pAudio->buffer.AudioBytes = sizeChunk;
+        pAudio->buffer.pAudioData = pDataBuffer;
 
         if(FAILED(pXAudio->CreateSourceVoice(&pAudio->pSVoice, (WAVEFORMATEX*)&wfx)))
             throw "Failed to create source voice.";
 
-        if(FAILED(pAudio->pSVoice->SubmitSourceBuffer(&bufXAudio)))
+        if(FAILED(pAudio->pSVoice->SubmitSourceBuffer(&pAudio->buffer)))
             throw "Failed to submit source buffer.";
 
     } catch (const char* error) {

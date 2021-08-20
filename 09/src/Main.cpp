@@ -49,8 +49,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPInst, LPSTR pCmd, int cmdShow) {
             DispatchMessageW(&msg);
         } else {
             cnt++;
-            if (cnt > 100) audio.stop();
-            if (cnt > 200) audio.play();
+            if (cnt == 200) audio.stop();
+            if (cnt == 300) audio.restart();
             imanager.inspect();
             if(imanager.getKey(12) & 0b011)
                 camera.posX++;
