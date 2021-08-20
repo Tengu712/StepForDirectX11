@@ -1,3 +1,5 @@
 #include "../include/resource.hpp"
 
 TEX_TEST IMAGE "./testtex.png"
+
+MUS_TEST WAVE "./test.wav"

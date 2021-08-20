@@ -34,7 +34,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPInst, LPSTR pCmd, int cmdShow) {
         return 1;
 
     Audio audio = Audio();
-    amanager.createAudio(0, &audio);
+    if (!amanager.createAudio(MUS_TEST, &audio))
+        return 1;
     audio.play();
 
    int cnt = 0;
