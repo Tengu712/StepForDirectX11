@@ -62,7 +62,6 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPInst, LPSTR pCmd, int cmdShow) {
     }
 
     UnregisterClassW(kNameWndClass, hInst);
-    CoUninitialize();
     return 0;
 }
 

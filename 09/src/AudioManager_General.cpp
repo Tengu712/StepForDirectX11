@@ -85,11 +85,15 @@ bool AudioManager::createAudio(unsigned int id, Audio* pAudio) {
         if (typeFile != fourccWAVE)
             throw "File type is different from WAVE.";
 
-        WAVEFORMATEXTENSIBLE wfx;
-        ZeroMemory(&wfx, sizeof(WAVEFORMATEXTENSIBLE));
+        ADPCMWAVEFORMAT wfx;
+        ZeroMemory(&wfx, sizeof(ADPCMWAVEFORMAT));
         if (!FindChunk(pLock, sizeRes, fourccFMT, &sizeChunk, &posChunk))
             throw "Failed to find FMT  chunk.";
-        memcpy(&wfx, pLock + posChunk, sizeChunk);
+        wfx.wSamplesPerBlock = 128;
+        wfx.wNumCoef = 7;
+        ADPCMCOEFSET aCoef[7] = {{256, 0}, {512, -256}, {0, 0}, {192, 64}, {240, 0}, {460, -208}, {392, -232}};
+        memcpy(&wfx.aCoef, aCoef, sizeof(aCoef));
+        memcpy(&wfx.wfx, pLock + posChunk, sizeChunk);
 
         if (!FindChunk(pLock, sizeRes, fourccDATA, &sizeChunk, &posChunk))
             throw "Failed to find DATA chunk.";
@@ -98,9 +102,9 @@ bool AudioManager::createAudio(unsigned int id, Audio* pAudio) {
 
         XAUDIO2_BUFFER bufXAudio;
         ZeroMemory(&bufXAudio, sizeof(XAUDIO2_BUFFER));
+        bufXAudio.Flags = XAUDIO2_END_OF_STREAM;
         bufXAudio.AudioBytes = sizeChunk;
         bufXAudio.pAudioData = pDataBuffer;
-        bufXAudio.Flags = XAUDIO2_END_OF_STREAM;
 
         if(FAILED(pXAudio->CreateSourceVoice(&pAudio->pSVoice, (WAVEFORMATEX*)&wfx)))
             throw "Failed to create source voice.";
